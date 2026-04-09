@@ -345,3 +345,122 @@ function formatarBRL(valor) {
     currency: "BRL",
   }).format(valor);
 }
+
+
+// ─────────────────────────────────────────────────────────────────
+// Histórico de relatórios (banco de dados)
+// ─────────────────────────────────────────────────────────────────
+
+async function carregarHistorico() {
+  await Promise.all([carregarResumoBanco(), buscarHistorico()]);
+}
+
+async function carregarResumoBanco() {
+  try {
+    const res = await fetch(API_BASE + "/api/historico/resumo");
+    const data = await res.json();
+
+    document.getElementById("resumoBanco").innerHTML = `
+      ${criarCardResumo("📊", "Total de Relatórios", data.total_relatorios)}
+      ${criarCardResumo("🏢", "Empresas Atendidas", data.total_empresas)}
+    `;
+  } catch (e) {
+    document.getElementById("resumoBanco").innerHTML = "";
+  }
+}
+
+async function buscarHistorico() {
+  const empresa = document.getElementById("buscaEmpresa").value;
+  const url = API_BASE + "/api/historico?limite=50" + (empresa ? `&empresa=${encodeURIComponent(empresa)}` : "");
+
+  try {
+    const res = await fetch(url);
+    const lista = await res.json();
+    renderizarHistorico(lista);
+  } catch (e) {
+    document.getElementById("historicoContainer").innerHTML =
+      `<p class="text-red-500 text-sm text-center py-4">Erro ao carregar histórico. Verifique se o backend está rodando.</p>`;
+  }
+}
+
+function renderizarHistorico(lista) {
+  const container = document.getElementById("historicoContainer");
+
+  if (!lista || lista.length === 0) {
+    container.innerHTML = `
+      <div class="text-center text-slate-400 py-8">
+        <div class="text-4xl mb-2">📂</div>
+        <p class="text-sm">Nenhum relatório encontrado.</p>
+      </div>`;
+    return;
+  }
+
+  const linhas = lista.map(r => `
+    <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+      <td class="py-3 px-4">
+        <p class="font-medium text-slate-800 text-sm">${r.empresa_nome}</p>
+        <p class="text-slate-400 text-xs">${r.nome_escritorio || "—"}</p>
+      </td>
+      <td class="py-3 px-4 text-sm text-slate-600">${r.periodo}</td>
+      <td class="py-3 px-4 text-sm font-medium text-slate-700">${formatarBRL(r.faturamento)}</td>
+      <td class="py-3 px-4 text-sm font-medium ${r.lucro_liquido >= 0 ? "text-green-600" : "text-red-600"}">
+        ${formatarBRL(r.lucro_liquido)}
+        <span class="text-xs text-slate-400 ml-1">(${r.margem_lucro}%)</span>
+      </td>
+      <td class="py-3 px-4 text-xs text-slate-400">${r.criado_em}</td>
+      <td class="py-3 px-4 text-right">
+        <div class="flex items-center justify-end gap-2">
+          ${r.tem_pdf ? `
+            <a href="${API_BASE}/api/download/${extrairIdDoCaminho(r.arquivo_pdf)}" target="_blank"
+              class="text-blue-600 text-xs font-medium hover:underline">⬇️ PDF</a>
+          ` : `<span class="text-slate-300 text-xs">PDF expirado</span>`}
+          <button onclick="deletarRelatorio(${r.id})"
+            class="text-red-400 text-xs hover:text-red-600">✕</button>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+
+  container.innerHTML = `
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b-2 border-slate-200">
+            <th class="pb-3 px-4 text-xs font-semibold text-slate-500 uppercase">Empresa</th>
+            <th class="pb-3 px-4 text-xs font-semibold text-slate-500 uppercase">Período</th>
+            <th class="pb-3 px-4 text-xs font-semibold text-slate-500 uppercase">Faturamento</th>
+            <th class="pb-3 px-4 text-xs font-semibold text-slate-500 uppercase">Lucro</th>
+            <th class="pb-3 px-4 text-xs font-semibold text-slate-500 uppercase">Data</th>
+            <th class="pb-3 px-4 text-xs font-semibold text-slate-500 uppercase text-right">Ações</th>
+          </tr>
+        </thead>
+        <tbody>${linhas}</tbody>
+      </table>
+    </div>`;
+}
+
+async function deletarRelatorio(id) {
+  if (!confirm("Remover este relatório do histórico?")) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/relatorio/${id}`, { method: "DELETE" });
+    const data = await res.json();
+    if (data.success) {
+      mostrarErroRapido("✅ Relatório removido!");
+      carregarHistorico();
+    }
+  } catch (e) {
+    mostrarErroRapido("Erro ao remover relatório.");
+  }
+}
+
+function extrairIdDoCaminho(caminho) {
+  if (!caminho) return "";
+  const nome = caminho.split(/[\\/]/).pop();
+  return nome.replace("relatorio_", "").replace(".pdf", "");
+}
+
+// Carrega o histórico quando a página abre
+window.addEventListener("load", () => {
+  carregarHistorico();
+});
