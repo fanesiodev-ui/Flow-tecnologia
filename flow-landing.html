@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── SEO PRIMARY ── -->
+  <title>Flow | Tecnologia e Inovação Contábil – Automatize e Lucre Mais</title>
+  <meta name="description" content="A Flow transforma sua operação com automação, IA contábil e planejamento tributário. Reduza custos em até 30%, elimine retrabalho e escale seu negócio com inteligência.">
+  <meta name="keywords" content="contabilidade digital, automação contábil, IA contábil, planejamento tributário, redução de custos operacionais, tecnologia contábil, flow contabilidade">
+  <meta name="author" content="Flow Tecnologia e Inovação Contábil">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.flowcontabil.com.br/">
+
+  <!-- ── OPEN GRAPH (Facebook / LinkedIn / WhatsApp) ── -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.flowcontabil.com.br/">
+  <meta property="og:title" content="Flow | Tecnologia e Inovação Contábil – Automatize e Lucre Mais">
+  <meta property="og:description" content="Pare de perder dinheiro com processos manuais. A Flow usa IA e automação para reduzir seus custos operacionais em até 30% e aumentar seu lucro líquido.">
+  <meta property="og:image" content="https://www.flowcontabil.com.br/og-image.jpg">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Flow Contabilidade">
+
+  <!-- ── TWITTER CARD ── -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Flow | Tecnologia e Inovação Contábil">
+  <meta name="twitter:description" content="Automação, IA contábil e planejamento tributário para empresas que querem crescer com inteligência.">
+  <meta name="twitter:image" content="https://www.flowcontabil.com.br/og-image.jpg">
+
+  <!-- ── STRUCTURED DATA (Schema.org) ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AccountingService",
+    "name": "Flow Tecnologia e Inovação Contábil",
+    "url": "https://www.flowcontabil.com.br",
+    "description": "Empresa especializada em automação de processos, IA contábil e planejamento tributário para negócios brasileiros.",
+    "telephone": "+55-66-99682-9004",
+    "email": "contato@flowcontabil.com.br",
+    "areaServed": "BR",
+    "availableLanguage": "Portuguese",
+    "sameAs": []
+  }
+  </script>
+
+  <!-- ── FONTS ── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Oxanium:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- ── FAVICON placeholder ── -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+  <style>
+    :root {
+      --cyan:      #00d4ff;
+      --green:     #00ffb3;
+      --dark:      #060b14;
+      --darker:    #03060c;
+      --card-bg:   #0a1220;
+      --text-muted:#8a9ab5;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.4;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 8%;
+      background: rgba(6, 11, 20, 0.75);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: padding .3s;
+    }
+
+    .logo {
+      font-family: 'Oxanium', sans-serif;
+      font-weight: 800; font-size: 26px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -1px;
+    }
+
+    nav { display: flex; align-items: center; gap: 32px; }
+    nav a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 15px; transition: color .2s; }
+    nav a:hover, nav a:focus { color: #fff; }
+
+    .nav-cta {
+      padding: 10px 22px; border-radius: 8px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      color: #000 !important; font-weight: 700 !important; font-size: 14px !important;
+      transition: transform .2s, box-shadow .2s !important;
+    }
+    .nav-cta:hover, .nav-cta:focus { transform: scale(1.05) !important; box-shadow: 0 0 24px rgba(0,255,179,0.35) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 8% 80px;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 10% 40%, rgba(0,212,255,0.12), transparent),
+        radial-gradient(ellipse 50% 50% at 80% 70%, rgba(0,255,179,0.08), transparent),
+        var(--dark);
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,255,179,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,179,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridFloat 20s linear infinite;
+    }
+    @keyframes gridFloat { from { background-position: 0 0; } to { background-position: 60px 60px; } }
+
+    .hero-content { position: relative; z-index: 1; max-width: 680px; }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 100px;
+      background: rgba(0,255,179,0.08);
+      border: 1px solid rgba(0,255,179,0.2);
+      color: var(--green); font-size: 12px; font-weight: 600;
+      letter-spacing: 1px; margin-bottom: 32px;
+      animation: fadeUp .6s ease both;
+    }
+    .badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--green); border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
+    .hero h1 {
+      font-family: 'Oxanium', sans-serif;
+      font-size: clamp(38px, 5vw, 62px);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -2px;
+      animation: fadeUp .6s .1s ease both;
+    }
+
+    .hero h1 .accent {
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin: 28px 0 40px;
+      color: var(--text-muted); font-size: 19px; line-height: 1.65;
+      animation: fadeUp .6s .2s ease both;
+    }
+
+    .hero-actions {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      animation: fadeUp .6s .3s ease both;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 17px 34px; border-radius: 12px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      color: #000; font-weight: 700; font-size: 16px;
+      text-decoration: none; transition: transform .25s, box-shadow .25s;
+      font-family: 'Oxanium', sans-serif;
+    }
+    .btn-primary:hover, .btn-primary:focus { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,255,179,0.3); }
+    .btn-primary svg { flex-shrink: 0; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 17px 28px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; font-weight: 500; font-size: 16px;
+      text-decoration: none; transition: border-color .25s, background .25s;
+      backdrop-filter: blur(8px);
+    }
+    .btn-secondary:hover, .btn-secondary:focus { border-color: rgba(0,255,179,0.4); background: rgba(0,255,179,0.04); }
+
+
+
+    /* ── SECTIONS ── */
+    .section { padding: 110px 8%; position: relative; z-index: 1; }
+
+    .section-label {
+      display: inline-block;
+      color: var(--green); font-size: 12px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .section h2 {
+      font-family: 'Oxanium', sans-serif;
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 800; letter-spacing: -1.5px;
+      line-height: 1.1; margin-bottom: 16px;
+    }
+
+    .section p.desc {
+      color: var(--text-muted); font-size: 17px;
+      margin-bottom: 60px; max-width: 520px; line-height: 1.6;
+    }
+
+    /* ── PROBLEM GRID ── */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px; overflow: hidden;
+    }
+
+    .problem-card {
+      background: var(--card-bg);
+      padding: 36px 32px;
+      position: relative; overflow: hidden;
+      transition: background .3s;
+    }
+    .problem-card:hover { background: #0e1a2e; }
+    .problem-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .35s ease;
+    }
+    .problem-card:hover::before { transform: scaleX(1); }
+
+    .problem-icon { font-size: 28px; margin-bottom: 18px; }
+    .problem-card h3 { font-family: 'Oxanium', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .problem-card p { color: var(--text-muted); font-size: 15px; line-height: 1.6; }
+
+    /* ── SOLUTION / RESULT CARDS ── */
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .solution-card {
+      padding: 36px 30px; border-radius: 18px;
+      background: linear-gradient(145deg, #0d1626, #0a1220);
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative; overflow: hidden;
+      transition: transform .3s, border-color .3s, box-shadow .3s;
+    }
+    .solution-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(0,255,179,0.25);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,255,179,0.1);
+    }
+    .solution-card::after {
+      content: '';
+      position: absolute; bottom: -40px; right: -40px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(0,255,179,0.08), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .step-num {
+      font-family: 'Oxanium', sans-serif;
+      font-size: 48px; font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      opacity: 0.25; margin-bottom: 16px; line-height: 1;
+    }
+    .solution-card h3 { font-family: 'Oxanium', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #fff; }
+    .solution-card p  { color: var(--text-muted); font-size: 15px; line-height: 1.65; }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      margin: 0 8% 110px;
+      background: linear-gradient(135deg, #00d4ff 0%, #00ffb3 100%);
+      border-radius: 24px; padding: 80px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .cta-section h2 {
+      font-family: 'Oxanium', sans-serif;
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 800; color: #000;
+      letter-spacing: -1.5px; margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+    .cta-section p { color: rgba(0,0,0,0.65); font-size: 18px; margin-bottom: 40px; position: relative; z-index: 1; }
+
+    .btn-dark {
+      position: relative; z-index: 1;
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 18px 38px; border-radius: 12px;
+      background: #000; color: #fff;
+      font-weight: 700; font-size: 17px;
+      text-decoration: none; font-family: 'Oxanium', sans-serif;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .btn-dark:hover, .btn-dark:focus { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.3); }
+
+    /* ── WHATSAPP FLOAT ── */
+    .wa-float {
+      position: fixed; bottom: 32px; right: 32px; z-index: 999;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: #25D366;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 32px rgba(37,211,102,0.45);
+      text-decoration: none;
+      animation: waBounce 2.5s 3s ease-in-out both;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .wa-float:hover, .wa-float:focus { transform: scale(1.1); box-shadow: 0 12px 40px rgba(37,211,102,0.6); }
+    @keyframes waBounce { 0%{transform:scale(0);opacity:0} 60%{transform:scale(1.1)} 80%{transform:scale(0.95)} 100%{transform:scale(1);opacity:1} }
+
+    .wa-tooltip {
+      position: absolute; right: 72px; top: 50%; transform: translateY(-50%);
+      background: #fff; color: #000; font-size: 13px; font-weight: 600;
+      padding: 8px 14px; border-radius: 8px; white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .wa-tooltip::after {
+      content: '';
+      position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
+      border: 6px solid transparent; border-right: none; border-left-color: #fff;
+    }
+    .wa-float:hover .wa-tooltip { opacity: 1; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--darker);
+      padding: 50px 8% 30px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 40px; flex-wrap: wrap; margin-bottom: 40px;
+    }
+    .footer-logo {
+      font-family: 'Oxanium', sans-serif; font-weight: 800; font-size: 22px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      margin-bottom: 10px;
+    }
+    .footer-tagline { color: var(--text-muted); font-size: 14px; }
+    .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
+    .footer-col h4 {
+      font-family: 'Oxanium', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; color: #fff; margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block; color: var(--text-muted); text-decoration: none;
+      font-size: 14px; margin-bottom: 10px; transition: color .2s;
+    }
+    .footer-col a:hover, .footer-col a:focus { color: var(--green); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px;
+      color: var(--text-muted); font-size: 13px;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── ACCESSIBILITY: focus outline ── */
+    :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      header { padding: 18px 5%; }
+      nav { gap: 16px; }
+      nav a:not(.nav-cta) { display: none; }
+      .hero { padding: 100px 5% 60px; }
+      .section { padding: 80px 5%; }
+      .cta-section { margin: 0 5% 80px; padding: 50px 30px; }
+      .footer-top { flex-direction: column; }
+      .wa-float { bottom: 20px; right: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── WHATSAPP FLOAT ── -->
+  <a
+    href="https://wa.me/5566996829004?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Flow."
+    class="wa-float"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Falar com a Flow pelo WhatsApp"
+  >
+    <div class="wa-tooltip" aria-hidden="true">Fale conosco agora!</div>
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="white" aria-hidden="true" focusable="false">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <!-- ── HEADER ── -->
+  <header role="banner">
+    <a href="/" class="logo" aria-label="Flow – Página inicial">FLOW</a>
+    <nav role="navigation" aria-label="Menu principal">
+      <a href="#solucoes">Soluções</a>
+      <a href="#resultados">Resultados</a>
+      <a href="#contato">Contato</a>
+      <a
+        href="https://wa.me/5566996829004?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Flow."
+        class="nav-cta"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Falar no WhatsApp</a>
+    </nav>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="hero" aria-label="Apresentação da Flow">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="badge" aria-label="Áreas de atuação">TECNOLOGIA · CONTABILIDADE · IA</div>
+      <h1>
+        Pare de perder dinheiro com<br>
+        <span class="accent">processos manuais</span><br>
+        e equipes inchadas
+      </h1>
+      <p>A Flow transforma sua operação em um sistema inteligente: menos pessoas, menos erros e muito mais lucro — com tecnologia e IA de ponta.</p>
+      <div class="hero-actions">
+        <a
+          href="https://wa.me/5566996829004?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Flow."
+          class="btn-primary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Quero escalar minha empresa
+        </a>
+        <a href="#solucoes" class="btn-secondary">Ver como funciona ↓</a>
+      </div>
+
+
+    </div>
+  </section>
+
+  <!-- ── PROBLEM ── -->
+  <section class="section reveal" id="problemas" aria-labelledby="problems-heading">
+    <div class="section-label">O PROBLEMA</div>
+    <h2 id="problems-heading">A realidade do empresário brasileiro</h2>
+    <p class="desc">Se você sente isso, sua empresa está travada por falta de tecnologia.</p>
+
+    <div class="problem-grid" role="list">
+      <article class="problem-card" role="listitem">
+        <div class="problem-icon" aria-hidden="true">👥</div>
+        <h3>Dependência de pessoas</h3>
+        <p>Você cresce, contrata mais... e lucra menos. A operação escala os problemas, não o resultado.</p>
+      </article>
+      <article class="problem-card" role="listitem">
+        <div class="problem-icon" aria-hidden="true">💸</div>
+        <h3>Folha cara demais</h3>
+        <p>Encargos trabalhistas consomem seu caixa silenciosamente mês a mês, sem retorno proporcional.</p>
+      </article>
+      <article class="problem-card" role="listitem">
+        <div class="problem-icon" aria-hidden="true">🔄</div>
+        <h3>Retrabalho constante</h3>
+        <p>Erros operacionais geram prejuízo invisível. Horas gastas corrigindo o que não devia ter errado.</p>
+      </article>
+      <article class="problem-card" role="listitem">
+        <div class="problem-icon" aria-hidden="true">📊</div>
+        <h3>Impostos acima do necessário</h3>
+        <p>Sem estratégia tributária, você paga muito mais do que a lei exige — e nem sabe disso.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── SOLUTION ── -->
+  <section class="section reveal" id="solucoes" aria-labelledby="solution-heading">
+    <div class="section-label">A SOLUÇÃO</div>
+    <h2 id="solution-heading">Como a Flow resolve<br>o seu problema</h2>
+    <p class="desc">Tecnologia aplicada diretamente no lucro da sua empresa. Do diagnóstico à execução.</p>
+
+    <div class="solution-grid" role="list">
+      <article class="solution-card" role="listitem">
+        <div class="step-num" aria-hidden="true">01</div>
+        <h3>Mapeamento Profundo</h3>
+        <p>Raio-x completo da sua operação para identificar desperdícios, gargalos e oportunidades de automação ocultas.</p>
+      </article>
+      <article class="solution-card" role="listitem">
+        <div class="step-num" aria-hidden="true">02</div>
+        <h3>Automação Total</h3>
+        <p>Processos executados sem intervenção humana. Sua empresa funciona enquanto você dorme.</p>
+      </article>
+      <article class="solution-card" role="listitem">
+        <div class="step-num" aria-hidden="true">03</div>
+        <h3>IA Contábil</h3>
+        <p>Lançamentos, conciliações e análises financeiras automatizadas com inteligência artificial.</p>
+      </article>
+      <article class="solution-card" role="listitem">
+        <div class="step-num" aria-hidden="true">04</div>
+        <h3>Planejamento Tributário</h3>
+        <p>Redução agressiva e 100% legal da carga tributária. Você fica com mais do que já é seu por direito.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── RESULTS (SUBSTITUÍDO) ── -->
+  <section class="section reveal" id="resultados" aria-labelledby="results-heading">
+    <div class="section-label">RESULTADO</div>
+    <h2 id="results-heading">Mais lucro.<br>Menos operação manual.<br>Total controle do seu negócio.</h2>
+    <p class="desc">
+      A Flow não entrega tarefas.
+      Entrega uma nova forma de operar sua empresa — mais enxuta, mais inteligente e muito mais lucrativa.
+    </p>
+    <div class="solution-grid" role="list">
+      <article class="solution-card" role="listitem">
+        <h3>Redução de custos invisíveis</h3>
+        <p>Eliminamos desperdícios operacionais que estão escondidos no dia a dia da sua empresa.</p>
+      </article>
+      <article class="solution-card" role="listitem">
+        <h3>Processos que funcionam sozinhos</h3>
+        <p>Sua operação roda com o mínimo de intervenção humana, reduzindo erros e dependência de equipe.</p>
+      </article>
+      <article class="solution-card" role="listitem">
+        <h3>Decisão baseada em dados</h3>
+        <p>Você passa a enxergar seu negócio com clareza — e toma decisões com segurança.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── DIFERENCIAL FLOW ── -->
+  <section class="section reveal" aria-labelledby="diferencial-heading">
+    <div class="section-label">DIFERENCIAL FLOW</div>
+    <h2 id="diferencial-heading">Você não está contratando um serviço.<br>Está implementando uma nova estrutura de empresa.</h2>
+    <p class="desc">A maioria das empresas tenta crescer contratando mais pessoas. Nós fazemos o contrário: crescemos reduzindo dependência humana.</p>
+
+    <div class="solution-grid" role="list">
+      <article class="solution-card" role="listitem">
+        <div class="step-num" aria-hidden="true">01</div>
+        <h3>Foco em Lucro, não em Processo</h3>
+        <p>Toda automação é pensada para impactar diretamente o caixa. Não entregamos tarefas bonitas — entregamos resultado financeiro.</p>
+      </article>
+      <article class="solution-card" role="listitem">
+        <div class="step-num" aria-hidden="true">02</div>
+        <h3>Visão Estratégica</h3>
+        <p>Não atuamos como executores. Atuamos como arquitetos da operação da sua empresa.</p>
+      </article>
+      <article class="solution-card" role="listitem">
+        <div class="step-num" aria-hidden="true">03</div>
+        <h3>Tecnologia Proprietária</h3>
+        <p>Desenvolvemos soluções sob medida. Nada de sistemas engessados que limitam seu crescimento.</p>
+      </article>
+      <article class="solution-card" role="listitem">
+        <div class="step-num" aria-hidden="true">04</div>
+        <h3>Escala Inteligente</h3>
+        <p>Sua empresa cresce sem aumentar proporcionalmente seus custos. Isso é o que diferencia negócios comuns de empresas lucrativas.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section id="contato" aria-labelledby="cta-heading">
+    <div class="cta-section reveal">
+      <h2 id="cta-heading">Você não precisa de mais funcionários.<br>Precisa de uma empresa inteligente.</h2>
+      <p>Fale agora com um especialista da Flow e descubra quanto sua empresa está perdendo.</p>
+      <a
+        href="https://wa.me/5566996829004?text=Ol%C3%A1!%20Quero%20uma%20an%C3%A1lise%20gratuita%20da%20minha%20empresa%20com%20a%20Flow."
+        class="btn-dark"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Solicitar análise gratuita pelo WhatsApp"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Análise gratuita agora
+      </a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer role="contentinfo">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">FLOW</div>
+        <div class="footer-tagline">Tecnologia e Inovação Contábil</div>
+      </div>
+      <div class="footer-links">
+        <nav class="footer-col" aria-label="Links da empresa">
+          <h4>Empresa</h4>
+          <a href="#">Sobre nós</a>
+          <a href="#">Casos de sucesso</a>
+          <a href="#">Blog</a>
+        </nav>
+        <nav class="footer-col" aria-label="Soluções oferecidas">
+          <h4>Soluções</h4>
+          <a href="#">Automação</a>
+          <a href="#">IA Contábil</a>
+          <a href="#">Tributário</a>
+        </nav>
+        <nav class="footer-col" aria-label="Canais de contato">
+          <h4>Contato</h4>
+          <a href="https://wa.me/5566996829004" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="mailto:contato@flowcontabil.com.br">E-mail</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Flow Tecnologia e Inovação Contábil. Todos os direitos reservados.</span>
+    </div>
+  </footer>
+
+  <script>
+    // ── Scroll reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target); // stop watching after revealed
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(r => observer.observe(r));
+
+    // ── Shrink header on scroll ──
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+      header.style.padding = window.scrollY > 60 ? '14px 8%' : '22px 8%';
+    }, { passive: true });
+  </script>
+
+</body>
+</html>

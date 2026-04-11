@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ContaFácil — Gerador de Relatórios Contábeis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .gradient-hero { background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 50%, #7C3AED 100%); }
+    .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+    .drop-zone { border: 2px dashed #CBD5E1; transition: all 0.2s; }
+    .drop-zone.drag-over { border-color: #3B82F6; background: #EFF6FF; }
+    .progress-bar { transition: width 0.5s ease; }
+    .fade-in { animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .spinner { animation: spin 1s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .color-preview { transition: background-color 0.2s; }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+  <!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 gradient-hero rounded-xl flex items-center justify-center text-white font-bold text-sm">CF</div>
+        <div>
+          <span class="font-bold text-slate-800 text-lg">ContaFácil</span>
+          <span class="hidden sm:inline text-slate-400 text-sm ml-2">Relatórios Inteligentes</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <button onclick="gerarDemo()"
+          class="text-sm text-blue-600 font-medium hover:text-blue-700 hidden sm:block">
+          Ver exemplo de relatório →
+        </button>
+        <span id="user-info" class="text-xs text-slate-400 hidden md:block"></span>
+        <button onclick="logout()"
+          class="text-xs text-slate-400 hover:text-red-500 border border-slate-200 rounded-lg px-3 py-1.5 transition">
+          Sair
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+  <section class="gradient-hero text-white py-16 px-6">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="inline-block bg-white/20 rounded-full px-4 py-1 text-sm font-medium mb-6">
+        Transforme balancetes em relatórios profissionais
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight mb-5">
+        Relatórios que seus<br/>clientes <span class="underline decoration-yellow-300">entendem</span>
+      </h1>
+      <p class="text-blue-100 text-lg leading-relaxed max-w-xl mx-auto">
+        Faça upload do balancete, personalize com sua marca e gere um PDF profissional
+        em segundos — sem precisar explicar nada tecnicamente.
+      </p>
+
+      <!-- Stats rápidos -->
+      <div class="flex justify-center gap-8 mt-10">
+        <div class="text-center">
+          <div class="text-3xl font-bold">30s</div>
+          <div class="text-blue-200 text-sm">Para gerar</div>
+        </div>
+        <div class="w-px bg-white/20"></div>
+        <div class="text-center">
+          <div class="text-3xl font-bold">100%</div>
+          <div class="text-blue-200 text-sm">Sua marca</div>
+        </div>
+        <div class="w-px bg-white/20"></div>
+        <div class="text-center">
+          <div class="text-3xl font-bold">PDF</div>
+          <div class="text-blue-200 text-sm">Premium</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ FORMULÁRIO PRINCIPAL ═══════════════════════════ -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 -mt-8 pb-16">
+
+    <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+
+      <!-- ─── PASSO 1: UPLOAD ─── -->
+      <div class="mb-8">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+          <h2 class="text-lg font-semibold text-slate-800">Upload do Balancete</h2>
+        </div>
+
+        <div id="dropZone"
+          class="drop-zone rounded-xl p-8 text-center cursor-pointer bg-slate-50 hover:bg-blue-50"
+          onclick="document.getElementById('fileInput').click()"
+          ondragover="handleDragOver(event)"
+          ondragleave="handleDragLeave(event)"
+          ondrop="handleDrop(event)">
+
+          <div id="uploadPlaceholder">
+            <div class="text-5xl mb-3">📄</div>
+            <p class="text-slate-700 font-medium mb-1">Arraste o arquivo aqui ou clique para selecionar</p>
+            <p class="text-slate-400 text-sm">Aceita Excel (.xlsx) e PDF · Máximo 10 MB</p>
+          </div>
+
+          <div id="uploadPreview" class="hidden">
+            <div class="text-4xl mb-2" id="fileIcon">📊</div>
+            <p class="text-blue-700 font-semibold" id="fileName"></p>
+            <p class="text-slate-400 text-sm" id="fileSize"></p>
+            <button onclick="limparArquivo(event)" class="mt-2 text-red-400 text-sm hover:text-red-600">
+              ✕ Remover arquivo
+            </button>
+          </div>
+        </div>
+        <input type="file" id="fileInput" class="hidden" accept=".xlsx,.xls,.pdf" onchange="handleFileSelect(this)" />
+      </div>
+
+      <!-- ─── PASSO 2: DADOS DA EMPRESA ─── -->
+      <div class="mb-8">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+          <h2 class="text-lg font-semibold text-slate-800">Dados da Empresa</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Nome da Empresa *</label>
+            <input type="text" id="empresaNome" placeholder="Ex: Padaria São João LTDA"
+              class="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Período de Referência *</label>
+            <input type="text" id="periodo" placeholder="Ex: Março/2024"
+              class="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── BOTÕES DE AÇÃO ─── -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button id="btnGerar" onclick="gerarRelatorio()"
+          class="flex-1 gradient-hero text-white font-semibold py-3.5 px-6 rounded-xl hover:opacity-90 transition flex items-center justify-center gap-2 text-base">
+          <span id="btnIcon">📄</span>
+          <span id="btnText">Gerar Relatório PDF</span>
+        </button>
+        <button onclick="gerarDemo()"
+          class="sm:w-auto border-2 border-blue-200 text-blue-600 font-semibold py-3.5 px-6 rounded-xl hover:bg-blue-50 transition text-base">
+          Demo Grátis
+        </button>
+      </div>
+
+      <!-- Indicador de progresso -->
+      <div id="progressContainer" class="hidden mt-6">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="spinner w-5 h-5 border-2 border-blue-200 border-t-blue-600 rounded-full"></div>
+          <span id="progressText" class="text-sm text-slate-600 font-medium">Processando seu arquivo...</span>
+        </div>
+        <div class="w-full bg-slate-100 rounded-full h-2">
+          <div id="progressBar" class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ RESULTADO ═══════════════════════════ -->
+    <div id="resultContainer" class="hidden fade-in mt-6">
+      <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+
+        <!-- Sucesso -->
+        <div id="resultSuccess" class="hidden">
+          <div class="flex items-start gap-4">
+            <div class="text-5xl">🎉</div>
+            <div class="flex-1">
+              <h3 class="text-xl font-bold text-slate-800 mb-1">Relatório gerado com sucesso!</h3>
+              <p class="text-slate-500 text-sm mb-4" id="resultMessage"></p>
+
+              <!-- Cards de resumo -->
+              <div id="summaryCards" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6"></div>
+
+              <!-- Botão de download -->
+              <a id="downloadBtn" href="#" target="_blank"
+                class="inline-flex items-center gap-2 gradient-hero text-white font-semibold py-3 px-6 rounded-xl hover:opacity-90 transition text-sm">
+                ⬇️ Baixar Relatório PDF
+              </a>
+              <button onclick="novoRelatorio()"
+                class="ml-3 text-sm text-slate-400 hover:text-slate-600">
+                Gerar outro →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Erro -->
+        <div id="resultError" class="hidden">
+          <div class="flex items-start gap-4">
+            <div class="text-4xl">⚠️</div>
+            <div>
+              <h3 class="text-lg font-bold text-red-700 mb-1">Ocorreu um erro</h3>
+              <p class="text-slate-600 text-sm" id="errorMessage"></p>
+              <button onclick="novoRelatorio()" class="mt-3 text-sm text-blue-600 hover:underline">
+                Tentar novamente →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ COMO FUNCIONA ═══════════════════════════ -->
+    <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-white rounded-xl p-5 border border-slate-100 card-hover">
+        <div class="text-3xl mb-3">📤</div>
+        <h3 class="font-semibold text-slate-800 mb-1">1. Faça o Upload</h3>
+        <p class="text-slate-500 text-sm">Envie o balancete em Excel ou PDF — o sistema lê automaticamente.</p>
+      </div>
+      <div class="bg-white rounded-xl p-5 border border-slate-100 card-hover">
+        <div class="text-3xl mb-3">🧠</div>
+        <h3 class="font-semibold text-slate-800 mb-1">2. Análise Automática</h3>
+        <p class="text-slate-500 text-sm">O sistema extrai os dados e gera insights em linguagem simples.</p>
+      </div>
+      <div class="bg-white rounded-xl p-5 border border-slate-100 card-hover">
+        <div class="text-3xl mb-3">📊</div>
+        <h3 class="font-semibold text-slate-800 mb-1">3. PDF Profissional</h3>
+        <p class="text-slate-500 text-sm">Relatório com sua marca, pronto para enviar ao cliente.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ O QUE O RELATÓRIO INCLUI ═══════════════════════════ -->
+    <div class="mt-6 bg-white rounded-2xl p-6 sm:p-8 border border-slate-100">
+      <h2 class="text-lg font-bold text-slate-800 mb-5">O que está incluído no relatório</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="flex items-start gap-3">
+          <span class="text-green-500 text-lg mt-0.5">✓</span>
+          <div>
+            <p class="font-medium text-slate-700 text-sm">Capa personalizada</p>
+            <p class="text-slate-400 text-xs">Com nome da empresa e sua marca</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-green-500 text-lg mt-0.5">✓</span>
+          <div>
+            <p class="font-medium text-slate-700 text-sm">Cards de indicadores</p>
+            <p class="text-slate-400 text-xs">Faturamento, Impostos e Lucro Líquido</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-green-500 text-lg mt-0.5">✓</span>
+          <div>
+            <p class="font-medium text-slate-700 text-sm">Tabela de despesas</p>
+            <p class="text-slate-400 text-xs">Composição completa com percentuais</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-green-500 text-lg mt-0.5">✓</span>
+          <div>
+            <p class="font-medium text-slate-700 text-sm">Análise inteligente</p>
+            <p class="text-slate-400 text-xs">Insights em linguagem simples, sem jargão</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-green-500 text-lg mt-0.5">✓</span>
+          <div>
+            <p class="font-medium text-slate-700 text-sm">Recomendações estratégicas</p>
+            <p class="text-slate-400 text-xs">Ações práticas baseadas nos números</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════ HISTÓRICO ═══════════════════════════ -->
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 pb-16">
+    <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-lg font-bold text-slate-800">📋 Histórico de Relatórios</h2>
+          <p class="text-slate-400 text-sm mt-1">Todos os relatórios gerados ficam salvos aqui</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <input type="text" id="buscaEmpresa" placeholder="Buscar empresa..."
+            oninput="buscarHistorico()"
+            class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-44" />
+          <button onclick="carregarHistorico()"
+            class="text-blue-600 text-sm font-medium hover:text-blue-700">
+            🔄 Atualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Cards de resumo do banco -->
+      <div id="resumoBanco" class="grid grid-cols-2 gap-3 mb-6"></div>
+
+      <!-- Tabela de histórico -->
+      <div id="historicoContainer">
+        <div class="text-center text-slate-400 py-8">
+          <div class="text-4xl mb-2">📂</div>
+          <p class="text-sm">Nenhum relatório gerado ainda.<br/>Gere o primeiro acima!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+  <footer class="bg-white border-t border-slate-200 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <div class="flex items-center justify-center gap-3 mb-3">
+        <img src="logo-flow.png" alt="Flow Tecnologia" class="h-8 opacity-60" />
+      </div>
+      <p class="text-slate-400 text-sm">
+        <strong class="text-slate-600">ContaFácil</strong> — Sistema SaaS para escritórios de contabilidade
+      </p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════ JAVASCRIPT ═══════════════════════════ -->
+  <script src="app.js"></script>
+</body>
+</html>
