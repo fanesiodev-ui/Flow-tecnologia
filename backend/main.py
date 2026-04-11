@@ -5,17 +5,18 @@ Sistema multi-tenant: cada contador acessa apenas seus próprios relatórios.
 
 import os
 import uuid
+from contextlib import asynccontextmanager
 from typing import Optional
 
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Depends
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Depends, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from config import UPLOAD_DIR, REPORTS_DIR, MAX_FILE_SIZE
+from config import UPLOAD_DIR, MAX_FILE_SIZE
 from database import get_db, criar_tabelas
 from models.schemas import FinancialData, WhiteLabelConfig
 from models.db_models import Contador, Relatorio
@@ -25,16 +26,23 @@ from processors.data_analyzer import analisar
 from generators.report_generator import ReportGenerator
 from auth import hash_senha, verificar_senha, criar_token, get_current_user
 
+
+# ── Startup ───────────────────────────────────────────────────────────────────
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    criar_tabelas()
+    yield
+
+
 # ── App ───────────────────────────────────────────────────────────────────────
+
 app = FastAPI(
     title="ContaFácil SaaS",
     description="Gerador de Relatórios Contábeis — Multi-tenant",
-    version="3.0.0",
+    version="3.1.0",
+    lifespan=lifespan,
 )
-
-@app.on_event("startup")
-def startup():
-    criar_tabelas()
 
 app.add_middleware(
     CORSMiddleware,
@@ -50,6 +58,7 @@ if os.path.isdir(FRONTEND_DIR):
 
 
 # ── Schemas de entrada ────────────────────────────────────────────────────────
+
 class RegisterInput(BaseModel):
     nome: str
     email: str
@@ -57,16 +66,18 @@ class RegisterInput(BaseModel):
     escritorio: str
 
 
-# ── Auth ──────────────────────────────────────────────────────────────────────
+# ── Rotas base ────────────────────────────────────────────────────────────────
 
 @app.get("/")
 async def root():
-    return {"mensagem": "ContaFácil SaaS v3.0", "login": "/app/login.html", "docs": "/docs"}
+    return {"mensagem": "ContaFácil SaaS v3.1", "login": "/app/login.html", "docs": "/docs"}
 
 @app.get("/health")
 async def health():
     return {"status": "ok"}
 
+
+# ── Auth ──────────────────────────────────────────────────────────────────────
 
 @app.post("/auth/register")
 async def register(data: RegisterInput, db: Session = Depends(get_db)):
@@ -170,8 +181,14 @@ async def generate_report(
         )
 
         report_id = str(uuid.uuid4())
-        report_path = os.path.join(REPORTS_DIR, f"relatorio_{report_id}.pdf")
+        report_filename = f"relatorio_{report_id}.pdf"
+        report_path = os.path.join(UPLOAD_DIR, report_filename)
         ReportGenerator(white_label).generate(dados_financeiros, insights, recomendacoes, report_path)
+
+        # Lê o PDF gerado e guarda no banco — o arquivo local pode ser descartado
+        with open(report_path, "rb") as f:
+            pdf_bytes = f.read()
+        os.remove(report_path)
 
         fat = dados_financeiros.faturamento
         margem = (dados_financeiros.lucro_liquido / fat * 100) if fat > 0 else 0
@@ -179,7 +196,8 @@ async def generate_report(
         registro = Relatorio(
             contador_id=atual.id,
             empresa_nome=empresa_nome, periodo=periodo,
-            arquivo_pdf=report_path,
+            arquivo_pdf=report_filename,
+            pdf_bytes=pdf_bytes,
             faturamento=dados_financeiros.faturamento,
             impostos=dados_financeiros.impostos,
             custos_operacionais=dados_financeiros.custos_operacionais,
@@ -246,16 +264,22 @@ async def demo_report(
     )
 
     report_id = str(uuid.uuid4())
-    report_path = os.path.join(REPORTS_DIR, f"relatorio_{report_id}.pdf")
+    report_filename = f"relatorio_{report_id}.pdf"
+    report_path = os.path.join(UPLOAD_DIR, report_filename)
     ReportGenerator(white_label).generate(dados_financeiros, insights, recomendacoes, report_path)
+
+    with open(report_path, "rb") as f:
+        pdf_bytes = f.read()
+    os.remove(report_path)
 
     registro = Relatorio(
         contador_id=atual.id,
         empresa_nome=empresa_nome, periodo=periodo,
-        arquivo_pdf=report_path, faturamento=150_000.0,
-        impostos=18_000.0, custos_operacionais=45_000.0,
-        despesas_administrativas=25_000.0, outras_despesas=12_000.0,
-        lucro_liquido=50_000.0, margem_lucro=33.3,
+        arquivo_pdf=report_filename,
+        pdf_bytes=pdf_bytes,
+        faturamento=150_000.0, impostos=18_000.0,
+        custos_operacionais=45_000.0, despesas_administrativas=25_000.0,
+        outras_despesas=12_000.0, lucro_liquido=50_000.0, margem_lucro=33.3,
         nome_escritorio=atual.escritorio, nome_contador=atual.nome,
         cor_primaria=atual.cor_primaria,
     )
@@ -283,22 +307,20 @@ async def download_report(
     if not all(c.isalnum() or c == "-" for c in report_id):
         raise HTTPException(status_code=400, detail="ID inválido")
 
-    report_path = os.path.join(REPORTS_DIR, f"relatorio_{report_id}.pdf")
+    report_filename = f"relatorio_{report_id}.pdf"
 
-    # Verifica se o relatório pertence ao contador logado
     registro = db.query(Relatorio).filter(
-        Relatorio.arquivo_pdf == report_path,
+        Relatorio.arquivo_pdf == report_filename,
         Relatorio.contador_id == atual.id,
     ).first()
-    if not registro:
+
+    if not registro or not registro.pdf_bytes:
         raise HTTPException(status_code=404, detail="Relatório não encontrado.")
 
-    if not os.path.exists(report_path):
-        raise HTTPException(status_code=404, detail="Arquivo PDF não encontrado.")
-
-    return FileResponse(
-        report_path, media_type="application/pdf",
-        filename=f"relatorio_{report_id[:8]}.pdf",
+    return Response(
+        content=registro.pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="relatorio_{report_id[:8]}.pdf"'},
     )
 
 
@@ -330,7 +352,7 @@ async def listar_historico(
             "margem_lucro": r.margem_lucro,
             "nome_escritorio": r.nome_escritorio,
             "criado_em": r.criado_em.strftime("%d/%m/%Y %H:%M") if r.criado_em else "",
-            "tem_pdf": os.path.exists(r.arquivo_pdf) if r.arquivo_pdf else False,
+            "tem_pdf": bool(r.pdf_bytes),
             "arquivo_pdf": r.arquivo_pdf,
         }
         for r in registros
@@ -363,9 +385,6 @@ async def deletar_relatorio(
     ).first()
     if not registro:
         raise HTTPException(status_code=404, detail="Relatório não encontrado.")
-
-    if registro.arquivo_pdf and os.path.exists(registro.arquivo_pdf):
-        os.remove(registro.arquivo_pdf)
 
     db.delete(registro)
     db.commit()

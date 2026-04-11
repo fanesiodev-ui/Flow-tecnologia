@@ -13,7 +13,7 @@ Relacionamentos:
 """
 
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text, LargeBinary
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -77,7 +77,8 @@ class Relatorio(Base):
     # Dados do relatório
     empresa_nome = Column(String(200), nullable=False)
     periodo = Column(String(50), nullable=False)
-    arquivo_pdf = Column(String(500), nullable=True)   # caminho do PDF
+    arquivo_pdf = Column(String(200), nullable=True)    # nome do arquivo (ex: relatorio_xxx.pdf)
+    pdf_bytes   = Column(LargeBinary, nullable=True)    # conteúdo do PDF — guardado no banco para sobreviver a restarts
 
     # Dados financeiros (para histórico e gráficos futuros)
     faturamento = Column(Float, default=0.0)
