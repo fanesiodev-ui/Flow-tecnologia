@@ -113,7 +113,7 @@
   </div>
 
   <script>
-    const API = "http://localhost:8080";
+    const API = window.location.origin;
 
     // Redireciona se já estiver logado
     if (localStorage.getItem("cf_token")) {

@@ -8,7 +8,7 @@
  *  - Preview de cores (white label)
  */
 
-const API_BASE = "http://localhost:8080";
+const API_BASE = window.location.origin;
 
 // ── Autenticação ──────────────────────────────────────────────────────────────
 function getToken() { return localStorage.getItem("cf_token"); }
