@@ -1,0 +1,3 @@
+# Dependências estão em backend/requirements.txt
+# Instalação configurada via nixpacks.toml
+-r backend/requirements.txt
