@@ -15,6 +15,10 @@ DATABASE_URL = os.getenv(
     "sqlite:///./storage/contafacil.db"  # fallback local se .env não existir
 )
 
+# Supabase/Railway às vezes fornecem "postgres://" — SQLAlchemy exige "postgresql://"
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 # PostgreSQL precisa de pool_pre_ping para reconectar após idle
 if DATABASE_URL.startswith("postgresql"):
     engine = create_engine(DATABASE_URL, pool_pre_ping=True, pool_size=5, max_overflow=10)

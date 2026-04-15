@@ -19,7 +19,7 @@ from models.db_models import Contador
 # ── Configurações ─────────────────────────────────────────────────────────────
 SECRET_KEY = os.getenv("SECRET_KEY", "contafacil-secret-key-mude-em-producao-2024")
 ALGORITHM  = "HS256"
-TOKEN_EXPIRE_HOURS = 8
+TOKEN_EXPIRE_HOURS = 72  # 3 dias
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 

@@ -149,6 +149,12 @@ async function gerarDemo() {
 // ─────────────────────────────────────────────────────────────────
 
 async function enviarParaAPI(endpoint, formData) {
+  const token = getToken();
+  if (!token) {
+    window.location.href = "/app/login.html";
+    return;
+  }
+
   setLoadingState(true);
   esconderResultado();
 
@@ -158,9 +164,17 @@ async function enviarParaAPI(endpoint, formData) {
 
     const response = await fetch(API_BASE + endpoint, {
       method: "POST",
-      headers: authHeaders(),
+      headers: { "Authorization": `Bearer ${token}` },
       body: formData,
     });
+
+    // Sessão expirada ou inválida → redireciona para login
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem("cf_token");
+      localStorage.removeItem("cf_user");
+      window.location.href = "/app/login.html?expired=1";
+      return;
+    }
 
     const data = await response.json();
 

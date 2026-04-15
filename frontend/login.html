@@ -120,6 +120,13 @@
       window.location.href = "/app/index.html";
     }
 
+    // Avisa que a sessão expirou
+    if (new URLSearchParams(window.location.search).get("expired")) {
+      const el = document.getElementById("login-erro");
+      el.textContent = "Sua sessão expirou. Faça login novamente.";
+      el.classList.remove("hidden");
+    }
+
     function mostrarTab(tab) {
       const isLogin = tab === "login";
       document.getElementById("form-login").classList.toggle("hidden", !isLogin);
