@@ -20,7 +20,11 @@ if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 # PostgreSQL precisa de pool_pre_ping para reconectar após idle
+# Supabase exige SSL — garante que sslmode=require está na URL
 if DATABASE_URL.startswith("postgresql"):
+    if "sslmode" not in DATABASE_URL:
+        sep = "&" if "?" in DATABASE_URL else "?"
+        DATABASE_URL = DATABASE_URL + sep + "sslmode=require"
     engine = create_engine(DATABASE_URL, pool_pre_ping=True, pool_size=5, max_overflow=10)
 else:
     engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})

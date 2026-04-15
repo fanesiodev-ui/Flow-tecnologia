@@ -73,8 +73,12 @@ async def root():
     return {"mensagem": "ContaFácil SaaS v3.1", "login": "/app/login.html", "docs": "/docs"}
 
 @app.get("/health")
-async def health():
-    return {"status": "ok"}
+async def health(db: Session = Depends(get_db)):
+    try:
+        total = db.query(Contador).count()
+        return {"status": "ok", "db": "connected", "contadores": total}
+    except Exception as e:
+        return {"status": "ok", "db": "error", "detail": str(e)}
 
 
 # ── Auth ──────────────────────────────────────────────────────────────────────
