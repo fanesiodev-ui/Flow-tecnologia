@@ -248,8 +248,13 @@ function mostrarSucesso(data) {
   document.getElementById("resultMessage").textContent =
     data.message || "Seu relatório está pronto para download.";
 
-  // Link de download
-  document.getElementById("downloadBtn").href = API_BASE + data.download_url;
+  // Link de download (via fetch para incluir o header Authorization)
+  const downloadBtn = document.getElementById("downloadBtn");
+  downloadBtn.href = "#";
+  downloadBtn.onclick = async (e) => {
+    e.preventDefault();
+    await baixarPDF(API_BASE + data.download_url);
+  };
 
   // Cards de resumo (se houver dados)
   if (data.summary) {
@@ -388,8 +393,8 @@ function renderizarHistorico(lista) {
       <td class="py-3 px-4 text-right">
         <div class="flex items-center justify-end gap-2">
           ${r.tem_pdf ? `
-            <a href="${API_BASE}/api/download/${extrairIdDoCaminho(r.arquivo_pdf)}" target="_blank"
-              class="text-blue-600 text-xs font-medium hover:underline">⬇️ PDF</a>
+            <button onclick="baixarPDF('${API_BASE}/api/download/${extrairIdDoCaminho(r.arquivo_pdf)}')"
+              class="text-blue-600 text-xs font-medium hover:underline">⬇️ PDF</button>
           ` : `<span class="text-slate-300 text-xs">PDF expirado</span>`}
           <button onclick="deletarRelatorio(${r.id})"
             class="text-red-400 text-xs hover:text-red-600">✕</button>
@@ -435,6 +440,32 @@ function extrairIdDoCaminho(caminho) {
   if (!caminho) return "";
   const nome = caminho.split(/[\\/]/).pop();
   return nome.replace("relatorio_", "").replace(".pdf", "");
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Download autenticado (envia Bearer token via fetch)
+// ─────────────────────────────────────────────────────────────────
+
+async function baixarPDF(url) {
+  try {
+    const res = await fetch(url, { headers: authHeaders() });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      mostrarErroRapido("Erro ao baixar PDF: " + (err.detail || res.status));
+      return;
+    }
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = "relatorio.pdf";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(blobUrl);
+  } catch (e) {
+    mostrarErroRapido("Erro ao baixar PDF: " + e.message);
+  }
 }
 
 // Carrega o histórico quando a página abre
